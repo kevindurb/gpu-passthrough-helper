@@ -1,0 +1,30 @@
+{
+  "name": "gpu-passthrough-helper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node ./index.ts",
+    "prettier": "prettier -w ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevindurb/gpu-passthrough-helper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevindurb/gpu-passthrough-helper/issues"
+  },
+  "homepage": "https://github.com/kevindurb/gpu-passthrough-helper#readme",
+  "description": "",
+  "dependencies": {
+    "@types/inquirer": "^7.3.1",
+    "@types/yargs": "^16.0.1",
+    "inquirer": "^8.0.0",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4",
+    "yargs": "^17.0.1"
+  }
+}
