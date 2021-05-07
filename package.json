@@ -1,7 +1,10 @@
 {
   "name": "gpu-passthrough-helper",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./gph",
+  "bin": {
+    "gph": "./gph"
+  },
   "scripts": {
     "start": "ts-node ./index.ts",
     "prettier": "prettier -w ."
