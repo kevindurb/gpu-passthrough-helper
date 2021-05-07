@@ -15,10 +15,12 @@ export class IommuService {
 
   async assertIOMMUEnabled() {
     try {
-      await exec('dmesg | grep -i -e "IOMMU.*enabldded"');
+      await exec('dmesg | grep -i -e "IOMMU.*enabled"');
       log.success('IOMMU Enabled');
     } catch {
-      throw new Error('IOMMU not enabled');
+      throw new Error(
+        'IOMMU not enabled. See https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Enabling_IOMMU',
+      );
     }
   }
 
@@ -28,7 +30,9 @@ export class IommuService {
         await exec('dmesg | grep -i -e "VT-d active"');
         log.success('Intel VT-d enabled');
       } catch {
-        throw new Error('Intel VT-d not enabled');
+        throw new Error(
+          'Intel VT-d not enabled. See https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Enabling_IOMMU',
+        );
       }
     } else {
       throw new Error('AMD not yet supported');
