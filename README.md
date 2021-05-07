@@ -103,3 +103,11 @@ $ npm install
 ```
 $ ./gph --help
 ```
+
+## TODO
+- [ ] Add support for checking virtualization enabled for AMD processors (need
+  someone to test)
+- [ ] Better ways of checking than grep-ing dmesg?
+- [ ] Checks for enabling vfio module
+- [ ] Checks for missing dependencies
+- [ ] Wizard for building libvirt vm with bound pci devices
