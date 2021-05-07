@@ -1,7 +1,9 @@
 import * as yargs from 'yargs';
 import * as chalk from 'chalk';
+import * as emoji from 'node-emoji';
 
 import { IommuService, IOMMUGroup } from '../services/IommuService';
+import { VfioService } from '../services/VfioService';
 import * as log from '../utils/log';
 
 interface Args {
@@ -36,7 +38,9 @@ const command: yargs.CommandModule<{}, Args> = {
   },
   async handler(args) {
     const iommuService = new IommuService();
+    const vfioService = new VfioService();
     const allGroups = await iommuService.getIOMMUGroups();
+    const boundDeviceIds = await vfioService.getBoundDeviceIds();
 
     let groups: IOMMUGroup[] = [];
 
@@ -49,7 +53,11 @@ const command: yargs.CommandModule<{}, Args> = {
     groups.forEach((group) => {
       log.info(chalk.bold(`IOMMU Group ${group.id}:`));
       group.devices.forEach((device) => {
-        log.info(`\t${chalk.bold('id:')} ${device.id}`);
+        const isBound = boundDeviceIds.includes(device.id);
+        const isBoundText = isBound
+          ? chalk.bold(`${emoji.get('white_check_mark')} Bound to vfio`)
+          : '';
+        log.info(`\t${chalk.bold('id:')} ${device.id} ${isBoundText}`);
         log.info(`\t${chalk.bold('description:')} ${device.description}`);
         log.info(`\t${chalk.bold('type:')} ${device.type}`);
         log.info(`\t${chalk.bold('slot:')} ${device.slot}`);

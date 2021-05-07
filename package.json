@@ -23,6 +23,7 @@
   "description": "",
   "dependencies": {
     "@types/inquirer": "^7.3.1",
+    "@types/node-emoji": "^1.8.1",
     "@types/yargs": "^16.0.1",
     "chalk": "^4.1.1",
     "inquirer": "^8.0.0",
