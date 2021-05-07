@@ -1,0 +1,6 @@
+#! /bin/bash
+
+mkdir -p ./AppDir/usr/local/lib/node_modules/gpu-passthrough-helper
+cp -r ./src ./AppDir/usr/local/lib/node_modules/gpu-passthrough-helper/src
+cp -r ./node_modules ./AppDir/usr/local/lib/node_modules/gpu-passthrough-helper/node_modules
+cp -r ./gph ./AppDir/usr/local/lib/node_modules/gpu-passthrough-helper/gph
