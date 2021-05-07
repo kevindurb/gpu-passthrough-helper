@@ -1,6 +1,6 @@
 # gpu passthrough helper
 A command line utility to help with the various steps of enabling gpu
-passthrough to a guest vm
+passthrough to a guest vm with the wonderful Arch Wiki Article (https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF)
 
 ## Requirements
 - A (recent?) Linux Distro
