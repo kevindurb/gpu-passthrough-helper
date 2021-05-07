@@ -7,14 +7,14 @@ import * as log from '../utils/log';
 
 const exec = util.promisify(childProcess.exec);
 
-interface PCIDevice {
+export interface PCIDevice {
   id: string;
   type: string;
   description: string;
   slot: string;
 }
 
-interface IOMMUGroup {
+export interface IOMMUGroup {
   id: string;
   devices: PCIDevice[];
 }
