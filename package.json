@@ -7,6 +7,8 @@
   },
   "scripts": {
     "start": "ts-node ./index.ts",
+    "build": "tsc ./src/index.ts --outDir ./dist",
+    "package": "pkg --config ./package.json ./dist/index.js",
     "prettier": "prettier -w ."
   },
   "repository": {
@@ -21,14 +23,23 @@
   },
   "homepage": "https://github.com/kevindurb/gpu-passthrough-helper#readme",
   "description": "",
-  "dependencies": {
+  "pkg": {
+    "targets": [
+      "node14-linux-x64"
+    ],
+    "outputPath": "dist"
+  },
+  "devDependencies": {
     "@types/inquirer": "^7.3.1",
     "@types/node-emoji": "^1.8.1",
     "@types/yargs": "^16.0.1",
+    "pkg": "^5.1.0",
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
     "chalk": "^4.1.1",
     "inquirer": "^8.0.0",
     "node-emoji": "^1.10.0",
-    "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4",
     "yargs": "^17.0.1"
