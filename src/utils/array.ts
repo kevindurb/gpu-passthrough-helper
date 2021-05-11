@@ -5,7 +5,7 @@ export const mapFilterUndefined = <
   items: ItemType[],
   mapper: (item: ItemType) => ReturnItemType | undefined,
 ): ReturnItemType[] =>
-  items.reduce((acc, next) => {
+  items.reduce<ReturnItemType[]>((acc, next) => {
     const result = mapper(next);
     if (!result) return acc;
     return [...acc, result];

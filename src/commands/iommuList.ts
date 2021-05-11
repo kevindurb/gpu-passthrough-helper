@@ -13,7 +13,7 @@ interface Args {
 
 const getGroupsWithType = (groups: IOMMUGroup[], type: string) =>
   groups.filter((group) => {
-    return group.devices.reduce((included, device) => {
+    return group.devices.reduce<boolean>((included, device) => {
       if (included) return true;
       if (device.type.includes(type)) {
         return true;

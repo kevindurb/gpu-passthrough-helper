@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "ts-node ./index.ts",
-    "build": "tsc ./src/index.ts --outDir ./dist",
+    "build": "tsc -p ./tsconfig.json",
     "package": "pkg --config ./package.json ./dist/index.js",
     "prettier": "prettier -w ."
   },
@@ -30,6 +30,7 @@
     "outputPath": "dist"
   },
   "devDependencies": {
+    "@tsconfig/node14": "^1.0.0",
     "@types/inquirer": "^7.3.1",
     "@types/node-emoji": "^1.8.1",
     "@types/shelljs": "^0.8.8",

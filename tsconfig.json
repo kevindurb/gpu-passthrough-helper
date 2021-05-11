@@ -1,7 +1,7 @@
 {
+  "extends":"@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
-    "resolveJsonModule": true,
-    "moduleResolution": "Node",
-    "target": "ESNext"
+    "outDir": "dist",
+    "rootDir": "src"
   }
 }
