@@ -7,6 +7,7 @@ const exec = util.promisify(childProcess.exec);
 
 export class VfioService {
   async getBoundDeviceIds() {
+    // TODO: switch to using lspci -v instead of grepping dmesg
     const { stdout } = await exec(`dmesg | grep -i "vfio_pci: add"`);
     const lines = stdout.split('\n').filter((line) => !!line);
     return lines.map((line) => {

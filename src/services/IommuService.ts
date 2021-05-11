@@ -1,11 +1,7 @@
-import * as childProcess from 'child_process';
 import * as fs from 'fs/promises';
-import * as util from 'util';
+import * as shelljs from 'shelljs';
 
-import { HardwareService, CPUVendor } from './HardwareService';
 import * as log from '../utils/log';
-
-const exec = util.promisify(childProcess.exec);
 
 export interface PCIDevice {
   id: string;
@@ -20,37 +16,14 @@ export interface IOMMUGroup {
 }
 
 export class IommuService {
-  private hardwareService: HardwareService;
-
-  constructor() {
-    this.hardwareService = new HardwareService();
-  }
-
   async assertIOMMUEnabled() {
-    try {
-      await exec('dmesg | grep -i -e "IOMMU.*enabled"');
-      log.success('IOMMU Enabled');
-    } catch {
+    const result = shelljs.ls('/sys/class/iommu');
+    if (!result.length) {
       throw new Error(
         'IOMMU not enabled. See https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Enabling_IOMMU',
       );
     }
-  }
-
-  async assertCPUVirtualizationEnabled() {
-    if (this.hardwareService.getCPUVendor() === CPUVendor.Intel) {
-      try {
-        await exec('dmesg | grep -i -e "VT-d active"');
-        log.success('Intel VT-d enabled');
-      } catch {
-        throw new Error(
-          'Intel VT-d not enabled. See https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Enabling_IOMMU',
-        );
-      }
-    } else {
-      throw new Error('AMD not yet supported');
-      // await exec('dmesg | grep -i -e "AMD-Vi active"');
-    }
+    log.success('IOMMU Enabled');
   }
 
   async getIOMMUGroupIds(): Promise<string[]> {
@@ -63,7 +36,7 @@ export class IommuService {
   }
 
   async getDeviceDetailsBySlot(slot: string): Promise<PCIDevice> {
-    const { stdout } = await exec(`lspci -nns ${slot}`);
+    const { stdout } = shelljs.exec(`lspci -nns ${slot}`);
     const result = stdout.match(/([\d\w:\.]+) (.+): (.+) \[(.+)\]/);
 
     if (!result) {
