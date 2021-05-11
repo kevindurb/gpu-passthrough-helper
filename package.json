@@ -2,6 +2,9 @@
   "name": "gpu-passthrough-helper",
   "version": "1.0.0",
   "main": "./gph",
+  "engines": {
+    "node": "^14.0.0"
+  },
   "bin": {
     "gph": "./gph"
   },
