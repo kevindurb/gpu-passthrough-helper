@@ -1,14 +1,8 @@
 import * as fs from 'fs/promises';
 import * as shelljs from 'shelljs';
 
+import { HardwareService, PCIDevice } from './HardwareService';
 import * as log from '../utils/log';
-
-export interface PCIDevice {
-  id: string;
-  type: string;
-  description: string;
-  slot: string;
-}
 
 export interface IOMMUGroup {
   id: string;
@@ -16,6 +10,12 @@ export interface IOMMUGroup {
 }
 
 export class IommuService {
+  private hardwareService: HardwareService;
+
+  constructor() {
+    this.hardwareService = new HardwareService();
+  }
+
   async assertIOMMUEnabled() {
     const result = shelljs.ls('/sys/class/iommu');
     if (!result.length) {
@@ -35,30 +35,13 @@ export class IommuService {
     return files.filter((file, index) => fileStats[index].isDirectory());
   }
 
-  async getDeviceDetailsBySlot(slot: string): Promise<PCIDevice> {
-    const { stdout } = shelljs.exec(`lspci -nns ${slot}`);
-    const result = stdout.match(/([\d\w:\.]+) (.+): (.+) \[(.+)\]/);
-
-    if (!result) {
-      throw new Error(`Not able to parse device: ${stdout}`);
-    }
-
-    const [, , type, description, id] = result;
-    return {
-      id,
-      type,
-      description,
-      slot,
-    };
-  }
-
   async getIOMMUGroupDetails(groupId: string): Promise<IOMMUGroup> {
     const deviceSlots = await fs.readdir(
       `/sys/kernel/iommu_groups/${groupId}/devices`,
     );
 
-    const devices = await Promise.all(
-      deviceSlots.map((slot) => this.getDeviceDetailsBySlot(slot)),
+    const devices = deviceSlots.map((slot) =>
+      this.hardwareService.getPCIDeviceDetailsBySlot(slot),
     );
 
     return {

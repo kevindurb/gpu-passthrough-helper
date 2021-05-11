@@ -40,7 +40,9 @@ const command: yargs.CommandModule<{}, Args> = {
     const iommuService = new IommuService();
     const vfioService = new VfioService();
     const allGroups = await iommuService.getIOMMUGroups();
-    const boundDeviceIds = await vfioService.getBoundDeviceIds();
+    const vfioDeviceIds = (await vfioService.getBoundDevices()).map(
+      ({ id }) => id,
+    );
 
     let groups: IOMMUGroup[] = [];
 
@@ -53,7 +55,7 @@ const command: yargs.CommandModule<{}, Args> = {
     groups.forEach((group) => {
       log.info(chalk.bold(`IOMMU Group ${group.id}:`));
       group.devices.forEach((device) => {
-        const isBound = boundDeviceIds.includes(device.id);
+        const isBound = vfioDeviceIds.includes(device.id);
         const isBoundText = isBound
           ? chalk.bold(`${emoji.get('white_check_mark')} Bound to vfio`)
           : '';

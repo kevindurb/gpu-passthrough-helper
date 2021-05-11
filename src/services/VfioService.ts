@@ -1,33 +1,26 @@
-import * as childProcess from 'child_process';
-import * as util from 'util';
-
 import * as log from '../utils/log';
-
-const exec = util.promisify(childProcess.exec);
+import { HardwareService } from './HardwareService';
 
 export class VfioService {
-  async getBoundDeviceIds() {
-    // TODO: switch to using lspci -v instead of grepping dmesg
-    const { stdout } = await exec(`dmesg | grep -i "vfio_pci: add"`);
-    const lines = stdout.split('\n').filter((line) => !!line);
-    return lines.map((line) => {
-      const parseResult = line.match(/\[.+\].+\[(.+)\[.*\]\]/);
-      if (!parseResult) {
-        throw new Error(`Not able to parse vfio bind: ${line}`);
-      }
-      const [, id] = parseResult;
-      return id;
-    });
+  hardwareService: HardwareService;
+
+  constructor() {
+    this.hardwareService = new HardwareService();
+  }
+
+  async getBoundDevices() {
+    const devices = this.hardwareService.getPCIDevices();
+    return devices.filter((device) => device.driver?.includes('vfio'));
   }
 
   async assertHasBoundDevices() {
-    const boundDevices = await this.getBoundDeviceIds();
+    const boundDevices = await this.getBoundDevices();
     if (!boundDevices.length) {
       throw new Error(
         'No devices bound to vfio. See https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Isolating_the_GPU',
       );
     } else {
-      boundDevices.forEach((id) => {
+      boundDevices.forEach(({ id }) => {
         log.success(`${id} bound to vfio`);
       });
     }
