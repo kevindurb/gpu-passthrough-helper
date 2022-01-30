@@ -17,19 +17,31 @@ const command: yargs.CommandModule = {
       await kvmService.assertCPUVirtualizationEnabled();
       await kvmService.assertKVMEnabled();
     } catch (error) {
-      log.failure(error.message);
+      if (error instanceof Error) {
+        log.failure(error.message);
+      } else {
+        log.failure(error)
+      }
     }
 
     try {
       await iommuService.assertIOMMUEnabled();
     } catch (error) {
-      log.failure(error.message);
+      if (error instanceof Error) {
+        log.failure(error.message);
+      } else {
+        log.failure(error)
+      }
     }
 
     try {
       await vfioService.assertHasBoundDevices();
     } catch (error) {
-      log.failure(error.message);
+      if (error instanceof Error) {
+        log.failure(error.message);
+      } else {
+        log.failure(error)
+      }
     }
   },
 };
